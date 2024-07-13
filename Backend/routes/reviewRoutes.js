@@ -1,4 +1,4 @@
-const controller = require('./controller.js')
+const controller = require('../controllers/reviewController.js')
 const router = require('express').Router()
 
 module.exports = () => {

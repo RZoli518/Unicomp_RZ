@@ -1,16 +1,17 @@
-const { getAllUsers } = require('./userService.js')
-const { getUserById } = require('./userService.js')
-const { createUser } = require('./userService.js')
-const { deleteUser } = require('./userService.js')
+const { getAllUsers } = require('../services/userService.js')
+const { getUserById } = require('../services/userService.js')
+const { createUser } = require('../services/userService.js')
+const { deleteUser } = require('../services/userService.js')
 
 module.exports = () => {
     getAllUsers: async (req, res) => {
         try{
             const users = await getAllUsers()
-            req.json(users)
+            //res.json(users)
+            res.send('User route')
         }
         catch(e){
-            res.status(500).send(e)
+            res.status(500).send('e')
         }
     }
 
@@ -23,7 +24,5 @@ module.exports = () => {
         catch(e){
             res.status(500).send(e)
         }
-    }
-
-    
+    }   
 }
