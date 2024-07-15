@@ -10,5 +10,4 @@ app.get('/', (req, res) => {
     res.end()
 })
 
-const port = process.env.PORT || 5000
-app.listen(port, console.log('Server started on port', port))
+module.exports = app
