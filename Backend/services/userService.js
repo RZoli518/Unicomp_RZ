@@ -6,7 +6,7 @@ const uri = 'mongodb+srv://reviczkyzoli:mongodb@unicompbooks.jclx9sy.mongodb.net
 
 
 exports.getAllUsers = async () => {
-    mongoose.connect(uri)
+    await mongoose.connect(uri)
 
     const result = await User.find({})
 
@@ -15,7 +15,7 @@ exports.getAllUsers = async () => {
 }
 
 exports.getUserById = async (id) => {
-    mongoose.connect(uri)
+    await mongoose.connect(uri)
 
     const result = await User.findOne({_id: id})
 
@@ -24,11 +24,11 @@ exports.getUserById = async (id) => {
 }
 
 exports.createNewUser = async (user) => {
-    mongoose.connect(uri)
+    await mongoose.connect(uri)
 
     await user.save()
 
-    if(user == await User.findOne({_id: user.id}))
+    if(user == await User.findOne({email: user.email}))
     {
         mongoose.connection.close()
         return true
@@ -40,15 +40,15 @@ exports.createNewUser = async (user) => {
 }
 
 exports.deleteUser = async (id) => {
-    mongoose.connect(uri)
+    await mongoose.connect(uri)
     await User.deleteOne({_id: id})
     mongoose.connection.close()
 }
 
-exports.updateUser = async (user) => {
-    mongoose.connect(uri)
-    await User.updateOne({_id: user.id}, {name: user.name, email: user.email, password: user.password, username: user.username})
-    if(user == await User.findOne({_id: user.id}))
+exports.updateUser = async (id, user) => {
+    await mongoose.connect(uri)
+    await User.updateOne({_id: id}, {name: user.name, email: user.email, password: user.password, username: user.username})
+    if(user == await User.findOne({email: user.email}))
     {
         return true
     }

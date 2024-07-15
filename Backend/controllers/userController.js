@@ -1,5 +1,6 @@
 const service = require('../services/userService.js')
 const User = require('../models/user.js')
+const { default: mongoose } = require('mongoose')
 
 //TODO: Request data from database
 
@@ -25,7 +26,11 @@ exports.getUserById = async (req, res) => {
 
 exports.createUser = async (req, res) => {
     try{
-        res.status(200).send('successful registration of user', req.params.id)
+        req.body = {_id: '10', name: 'direct approach', email: 'direct22222@gmail.com', password: 'direct22222', username: 'direct22222'}
+        const { _id, name, email, password, username } = req.body
+        const newUser = new User({_id, name, email, password, username})
+        await service.createNewUser(newUser)
+        res.status(200).send('New user created')
     }
     catch(e){
         res.status(500).send(e)
@@ -44,7 +49,13 @@ exports.deleteUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     try{
-        res.status(200).send('successfully updated user', req.params.id)
+        const updateUser = await service.updateUser(req.params.id, req.body)
+        if(updateUser){
+            res.status(200).send('successfully updated user', req.params.id)
+        }
+        else{
+            res.status(500).send('failed to update user')
+        }
     }
     catch(e){
         res.status(500).send(e)

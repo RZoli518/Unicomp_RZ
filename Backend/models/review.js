@@ -1,11 +1,6 @@
 const mongoose = require('mongoose')
 
 const reviewSchema = new mongoose.Schema({
-    _id: {
-        type: String,
-        required: true,
-        unique: true,
-    },
     summary: {
         type: String,
         required: true,
