@@ -1,24 +1,85 @@
-const { getAllBooks } = require('../services/bookService.js')
-const { getBookById } = require('../services/bookService.js')
-const { createBook } = require('../services/bookService.js')
-const { deleteBook } = require('../services/bookService.js')
+const service = require('../services/bookService.js')
+const Book = require('../models/book.js')
 
-module.exports = () => {
-    getAllBooks: async (req, res) => {
+//Returns all books in the database
+exports.getAllBooks = async (req, res) => {
+    try{
+        const books = await service.getAllBooks()
+        res.status(200).json(books)
+    }
+    catch(e) {
+        res.status(500).send(e)
+    }
+}
+
+//Finds and returns a specific book based on it's ID
+exports.getBookById = async (req, res) => {
+    if(req.params.id.length != 24){                 //checking if the provided id can be valid for the ObjectID based database
+        res.status(400).send("Invalid Id provided")
+    }
+    else{
         try{
-            const Books = await getAllBooks()
-            req.json(Books)
+            const bookById = await service.getBookById(req.params.id)
+            res.status(200).json(bookById)
+        }
+        catch(e) {
+            res.status(500).send(e)
+        }
+    }
+}
+
+//Creates a new book based on the request body. ID is generated automatically
+exports.createBook = async (req, res) => {
+    console.log(req.body)
+    try{
+        const newBook = new Book({
+            title: req.body.title,
+            author: req.body.author,
+            rating: req.body.rating,
+            description: req.body.description
+        })
+        await service.createNewBook(newBook)
+        res.status(200).send("Created new book")
+    }
+    catch(e){
+        res.status(500).send(e)
+    }
+}
+
+//Deletes a book based on the provided ID
+exports.deleteBook = async (req, res) => {
+    if(req.params.id.length != 24){                 //checking if the provided id can be valid for the ObjectID based database
+        res.status(400).send("Invalid Id provided")
+    }
+    else{
+        try{
+            await service.deleteBook(req.params.id)
+            res.status(200).send("Book deleted")
         }
         catch(e){
             res.status(500).send(e)
         }
     }
+}
 
-    getBookById: async (req, res) => {
+//Updates a book based on the received ID and parameters. Any parameter can be null
+exports.updateBook = async (req, res) => {
+    if(req.params.id.length != 24){                 //checking if the provided id can be valid for the ObjectID based database
+        res.status(400).send("Invalid Id provided")
+    }
+    else{
         try{
-            const BookId = req.params.BookId
-            const Book = await getBookById(BookId)
-            res.json(Book)
+            const updatedBook = new Book({
+                _id: req.params.id,
+                title: req.body.title,
+                author: req.body.author,
+                rating: req.body.rating,
+                description: req.body.description
+            })
+
+            await service.updateBook(updatedBook)
+
+            res.status(200).send("Book updated")
         }
         catch(e){
             res.status(500).send(e)

@@ -4,18 +4,20 @@ const bookSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-        unique: true,
     },
     author: {
         type: String,
         required: true,
     },
-    average: {
+    rating: {
         type: Number,
         required: true,
+    },
+    description: {
+        type: String,
     }
 })
 
-const Book = mongoose.model('Bool', bookSchema)
+const Book = mongoose.model('books', bookSchema)
 module.exports = Book
 

@@ -1,9 +1,16 @@
 const controller = require('../controllers/bookController.js')
-const router = require('express').Router()
+const express = require('express')
+const router = express.Router()
 
-module.exports = () => {
-    router.get('/', controller.getAllBooks)
-    router.get('/:id', controller.getBookById)
-    router.post('/', controller.createBook)
-    router.delete('/:id', controller.deleteBook)
-}
+//For details about the possible requests see the README file
+
+router.route('/').get(controller.getAllBooks)
+
+router.route('/:id')
+    .get(controller.getBookById)
+    .put(controller.updateBook)
+    .delete(controller.deleteBook)
+
+router.route('/create').post(controller.createBook)
+
+module.exports = router
