@@ -47,8 +47,6 @@ exports.deleteUser = async (id) => {
     mongoose.connection.close()
 }
 
-
-//TODO: Usernek update
 exports.updateUser = async (user) => {
     await mongoose.connect(uri)
     await User.updateOne({_id: user._id}, {name: user.name, email: user.email, password: user.password, username: user.username})

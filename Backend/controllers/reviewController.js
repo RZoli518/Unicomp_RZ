@@ -48,6 +48,10 @@ exports.createReview = async (req, res) => {
             authorid: req.body.authorid,
             bookid: req.body.bookid
         })
+        const validated = await validReview(newReview)
+        if(validated){
+            return res.status(400).send(validated)
+        }
 
         await service.createNewReview(newReview)
 
@@ -97,6 +101,11 @@ exports.updateReview = async (req, res) => {
                 bookid: req.body.bookid
             })
 
+            const validated = await validReview(updatedReview)
+            if(validated){
+                return res.status(400).send(validated)
+            }
+
             await service.updateReview(updatedReview)
 
             const review = await service.getReviewById(updatedReview._id)
@@ -104,7 +113,6 @@ exports.updateReview = async (req, res) => {
             bookScoreUpdate(review.bookid)
 
             res.status(200).send("Review updated")
-
         }
         catch(e){
             res.status(500).send(e)
@@ -148,7 +156,6 @@ exports.getReviewsByAuthorId = async (req, res) => {
 //this function calculates the new average rating of the book the review was created about
 async function bookScoreUpdate(id){
     const scores = await service.getReviewsByBookId(id)
-    console.log("Scores", scores)
     if(scores.length > 1){
         var total = 0
         var count = 0
@@ -176,4 +183,32 @@ async function bookScoreUpdate(id){
         })
         await bookservice.updateBook(bookAvg)
     }
+}
+
+function validReview(review) {
+    if(review.summary){
+        let size = review.summary.length
+        switch(size){
+            case size > 100:
+                return { responseMessage: 'Invalid text length', responseError: 'Summary too long'}
+            case site < 20:
+                return { responseMessage: 'Invalid text length', responseError: 'Summary too short'}
+        }
+    }
+
+    if(review.text){
+        let size = review.text.length
+        switch(size){
+            case size > 2000:
+                return { responseMessage: 'Invalid text length', responseError: 'Text too long'}
+            case site < 250:
+                return { responseMessage: 'Invalid text length', responseError: 'Text too short'}
+        }
+    }
+    
+    if(review.score && (review.score > 5 || review.score < 1)){
+        return { responseMessage: 'Score must be between 1 and 5', responseError: 'Invalid rating'}
+    }
+
+    return null
 }
