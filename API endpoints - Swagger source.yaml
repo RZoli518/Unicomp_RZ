@@ -1,0 +1,531 @@
+openapi: 3.0.3
+info:
+  title: Book Review Site - Zoltán Reviczky
+  description: |-
+    This is the endpoint documentation for the backend assignment I created as part of the application process at Unicomp
+
+    - [Github repository of the project](https://github.com/swagger-api/swagger-petstore)
+  version: 1.0.11
+tags:
+  - name: Book reviews
+    description: The endpoints of the API
+  - name: users
+    description: Operations on and about users
+  - name: books
+    description: Operations on and about books
+  - name: reviews
+    description: Operations on and about reviews
+paths:
+  /users:
+    get:
+      tags:
+        - users
+      summary: Returns all users in the database
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'          
+        '500':
+          description: Something went wrong
+  /users/id/{id}:
+    get:
+      tags:
+        - users
+      summary: Returns a user's data
+      description: Returns all data about the user that belongs to the id
+      operationId: getUserById
+      parameters:
+        - name: id
+          in: path
+          description: Id of the user to return
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'          
+        '400':
+          description: User query failed, Invalid id
+        '404':
+          description: User not found
+        '500':
+          description: Something went wrong
+    put:
+      tags:
+        - users
+      security:
+        - bearerAuth: []
+      summary: Updates a user
+      description: Updates an existing user by the provided id. Any parameter can be null
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          description: Id of the user to update
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: User query failed, Invalid id
+        '500':
+          description: Something went wrong
+    delete:
+      tags:
+        - users
+      security:
+        - bearerAuth: []
+      summary: Deletes a user
+      description: Multiple status values can be provided with comma separated strings
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          description: Id of the user to delete
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Deleting user failed. Invalid id.
+        '500':
+          description: Something went wrong
+  /users/username/{username}:
+    get:
+      tags:
+        - users
+      summary: Returns a user's data based on the username
+      description: Finds and returns a user's data based on the provided username
+      operationId: getUserByUsername
+      parameters:
+        - name: username
+          in: path
+          description: ID of the user to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'          
+        '400':
+          description: User query failed, Invalid id
+        '404':
+          description: User not found
+        '500':
+          description: Something went wrong
+  /users/create:
+    post:
+      tags:
+        - users
+      summary: Creates a new user
+      description: Creates/registers a new user
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successful operation
+        '500':
+          description: Something went wrong
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Login by username and password
+      description: Handles login operation with a password check and generates JWT token
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/loginInfo'  
+        '404':
+          description: Authentication failed, user not fount
+        '401':
+          description: Authentication failed, wrong password.
+        '500':
+          description: Something went wrong
+          
+          
+          
+          
+          
+  /books:
+    get:
+      tags:
+        - books
+      summary: Returns all books in the database
+      operationId: getAllBooks
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'          
+        '500':
+          description: Something went wrong
+  /books/{id}:
+    get:
+      tags:
+        - books
+      summary: Returns a book's data
+      description: Returns all data about the book that belongs to the id
+      operationId: getBookById
+      parameters:
+        - name: id
+          in: path
+          description: Id of the book to return
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'          
+        '400':
+          description: Book query failed, Invalid id
+        '404':
+          description: Book not found
+        '500':
+          description: Something went wrong
+    put:
+      tags:
+        - books
+      security:
+        - bearerAuth: []
+      summary: Updates a book
+      description: Updates an existing book by the provided id. Any parameter can be null
+      operationId: updateBook
+      parameters:
+        - name: id
+          in: path
+          description: Id of the book to update
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Book query failed, Invalid id
+        '500':
+          description: Something went wrong
+    delete:
+      tags:
+        - books
+      security:
+        - bearerAuth: []
+      summary: Deletes a book
+      description: Multiple status values can be provided with comma separated strings
+      operationId: deleteBook
+      parameters:
+        - name: id
+          in: path
+          description: Id of the book to delete
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Deleting book failed. Invalid id.
+        '500':
+          description: Something went wrong
+  /books/create:
+    post:
+      tags:
+        - books
+      security:
+        - bearerAuth: []
+      summary: Creates a new book
+      description: Creates/registers a new book
+      operationId: createBook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: Successful operation
+        '500':
+          description: Something went wrong
+       
+       
+       
+       
+        
+  /reviews:
+    get:
+      tags:
+        - reviews
+      summary: Returns all reviews in the database
+      operationId: getAllReviews
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'          
+        '500':
+          description: Something went wrong
+  /reviews/{id}:
+    get:
+      tags:
+        - reviews
+      summary: Returns a review's data
+      description: Returns all data about the review that belongs to the id
+      operationId: getReviewById
+      parameters:
+        - name: id
+          in: path
+          description: Id of the review to return
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'          
+        '400':
+          description: Review query failed, Invalid id
+        '404':
+          description: Review not found
+        '500':
+          description: Something went wrong
+    put:
+      tags:
+        - reviews
+      security:
+        - bearerAuth: []
+      summary: Updates a review
+      description: Updates an existing review by the provided id. Any parameter can be null
+      operationId: updateReview
+      parameters:
+        - name: id
+          in: path
+          description: Id of the review to update
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Review query failed, Invalid id
+        '500':
+          description: Something went wrong
+    delete:
+      tags:
+        - reviews
+      security:
+        - bearerAuth: []
+      summary: Deletes a review
+      description: Multiple status values can be provided with comma separated strings
+      operationId: deleteReview
+      parameters:
+        - name: id
+          in: path
+          description: Id of the review to delete
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Deleting review failed. Invalid id.
+        '500':
+          description: Something went wrong
+  /reviews/create:
+    post:
+      tags:
+        - reviews
+      security:
+        - bearerAuth: [] 
+      summary: Creates a new review
+      description: Creates/registers a new review
+      operationId: createReview
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+      responses:
+        '200':
+          description: Successful operation
+        '500':
+          description: Something went wrong
+  /reviews/book/{id}:
+    get:
+      tags:
+        - reviews
+      summary: Returns all reviews for a book
+      description: Returns all reviews for the given book id
+      operationId: getReviewsByBookId
+      parameters:
+        - name: id
+          in: path
+          description: Id of the book
+          required: true
+          schema:
+            type: string
+            format: ObjectId
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'          
+        '400':
+          description: Review query failed, Invalid id
+        '404':
+          description: Review not found
+        '500':
+          description: Something went wrong
+            
+      
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Példa Péter
+        email:
+          type: string
+          example: ppeti@examplemail.com
+        password:
+          type: string
+          format: hashed String
+          example: $2b$10$YRyDKR6M31GDf6g6i5wWTeMfn7ud9UsrPbnlLNvNZP0O5D544m03S
+        username:
+          type: string
+          example: ppeti
+    Book:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Példakönyv pélaértékeléssel
+        author:
+          type: string
+          example: Példa Petra
+        rating:
+          type: number
+          example: 3.8
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis hendrerit dolor magna eget est lorem ipsum.
+    Review:
+      type: object
+      properties:
+        summary:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+        text:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis hendrerit dolor magna eget est lorem ipsum. Lectus urna duis convallis convallis tellus id interdum velit. At erat pellentesque adipiscing commodo. Cursus eget nunc scelerisque viverra mauris. Egestas pretium aenean pharetra magna ac placerat vestibulum lectus. Bibendum neque egestas congue quisque egestas diam in arcu cursus. Feugiat pretium nibh ipsum consequat nisl vel. Viverra maecenas accumsan lacus vel facilisis volutpat est. Faucibus turpis in eu mi bibendum neque egestas congue quisque. Id diam vel quam elementum pulvinar etiam non quam lacus. Et netus et malesuada fames ac turpis. Diam donec adipiscing tristique risus nec feugiat. Nisi lacus sed viverra tellus in hac. Elit duis tristique sollicitudin nibh sit. Et tortor consequat id porta nibh venenatis cras sed felis. Senectus et netus et malesuada fames ac turpis.
+        score:
+          type: number
+          example: 3
+        authorid:
+          type: string
+          example: 66979701f2e3d589e33dfa13
+        bookid: 
+          type: string
+          example: 6693bd3e4f430d1ed28ee645
+    login:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Példa Péter
+        password:
+          type: string
+          example: 1234
+    loginInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Példa Péter
+        email:
+          type: string
+          example: ppeti@examplemail.com
+        username:
+          type: string
+          example: ppeti
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBwZXRyYSIsImlhdCI6MTcyMTIxODk4NywiZXhwIjoxNzIxMjQwNTg3fQ.ge9yzymYuwXqxX109qZWU-h13qiO3eHXxDTz__PYrFg
