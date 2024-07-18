@@ -179,7 +179,7 @@ async function bookScoreUpdate(id){
     else if(scores.length = 1){
         const bookAvg = new Book({
             _id: id,
-            rating: scores[1].score
+            rating: scores[0].score
         })
         await bookservice.updateBook(bookAvg)
     }
@@ -198,7 +198,7 @@ function validReview(review) {
         switch(size){
             case size > 100:
                 return { responseMessage: 'Invalid text length', responseError: 'Summary too long'}
-            case site < 20:
+            case size < 20:
                 return { responseMessage: 'Invalid text length', responseError: 'Summary too short'}
         }
     }
@@ -208,7 +208,7 @@ function validReview(review) {
         switch(size){
             case size > 2000:
                 return { responseMessage: 'Invalid text length', responseError: 'Text too long'}
-            case site < 250:
+            case size < 250:
                 return { responseMessage: 'Invalid text length', responseError: 'Text too short'}
         }
     }
