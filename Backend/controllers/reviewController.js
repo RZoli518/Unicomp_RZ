@@ -8,7 +8,7 @@ const Book = require('../models/book.js')
 exports.getAllReviews = async (req, res) => {
     try{
         const reviews = await service.getAllReviews()
-        res.status(200).json(reviews)
+        res.status(200).json({ reviews: reviews })
     }
     catch(e) {
         console.log(e)
@@ -26,7 +26,7 @@ exports.getReviewById = async (req, res) => {
             const reviewById = await service.getReviewById(req.params.id)
             console.log(reviewById)
             if(reviewById){
-                res.status(200).json(reviewById)
+                res.status(200).json({ review: reviewById })
             }
             else{
                 console.log(reviewById)
@@ -133,7 +133,7 @@ exports.getReviewsByBookId = async (req, res) => {
     else{
         try{
             const bookReviews = await service.getReviewsByBookId(req.params.id)
-            res.status(200).json(bookReviews)
+            res.status(200).json({ reviews: bookReviews })
         }
         catch(e){
             console.log(e)
@@ -150,7 +150,7 @@ exports.getReviewsByAuthorId = async (req, res) => {
     else{
         try{
             const authorReviews = await service.getReviewsByAuthorId(req.params.id)
-            res.status(200).json(authorReviews)
+            res.status(200).json({ reviews: authorReviews })
         }
         catch(e){
             console.log(e)

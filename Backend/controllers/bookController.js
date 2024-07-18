@@ -5,7 +5,7 @@ const Book = require('../models/book.js')
 exports.getAllBooks = async (req, res) => {
     try{
         const books = await service.getAllBooks()
-        res.status(200).json(books)
+        res.status(200).json({ books: books })
     }
     catch(e) {
         console.log(e)
@@ -21,7 +21,7 @@ exports.getBookById = async (req, res) => {
     else{
         try{
             const bookById = await service.getBookById(req.params.id)
-            res.status(200).json(bookById)
+            res.status(200).json({ book: bookById })
         }
         catch(e) {
             console.log(e)

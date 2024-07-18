@@ -9,7 +9,7 @@ const User = require('../models/user.js')
 exports.getAllUsers = async (req, res) => {
     try{
         const users = await service.getAllUsers()
-        res.status(200).json(users)
+        res.status(200).json({ users: users })
     }
     catch(e) {
         console.log(e)
@@ -29,7 +29,7 @@ exports.getUserById = async (req, res) => {
                 res.status(404).send({ responseMessage: 'User not found', responseError: 'User not found'})
             }
             else{
-                res.status(200).json(userById)
+                res.status(200).json({ user: userById })
             }
         }
         catch(e) {
@@ -47,7 +47,7 @@ exports.getUserByUsername = async (req, res) => {
             res.status(404).send({ responseMessage: 'User not found', responseError: 'User not found'})
         }
         else{
-            res.status(200).json(userByUsername)
+            res.status(200).json({ user: userByUsername })
         }
     }
     catch(e) {
