@@ -8,6 +8,7 @@ exports.getAllBooks = async (req, res) => {
         res.status(200).json(books)
     }
     catch(e) {
+        console.log(e)
         res.status(500).send(e)
     }
 }
@@ -15,7 +16,7 @@ exports.getAllBooks = async (req, res) => {
 //Finds and returns a specific book based on it's ID
 exports.getBookById = async (req, res) => {
     if(req.params.id.length != 24){                 //checking if the provided id can be valid for the ObjectID based database
-        res.status(400).send("Invalid Id provided")
+        res.status(400).send({ responseMessage:'Book query failed', responseError: 'Invalid id' })
     }
     else{
         try{
@@ -23,6 +24,7 @@ exports.getBookById = async (req, res) => {
             res.status(200).json(bookById)
         }
         catch(e) {
+            console.log(e)
             res.status(500).send(e)
         }
     }
@@ -30,7 +32,6 @@ exports.getBookById = async (req, res) => {
 
 //Creates a new book based on the request body. ID is generated automatically
 exports.createBook = async (req, res) => {
-    console.log(req.body)
     try{
         const newBook = new Book({
             title: req.body.title,
@@ -39,9 +40,10 @@ exports.createBook = async (req, res) => {
             description: req.body.description
         })
         await service.createNewBook(newBook)
-        res.status(200).send("Created new book")
+        res.status(200).send({ responseMessage: "Created new book" })
     }
     catch(e){
+        console.log(e)
         res.status(500).send(e)
     }
 }
@@ -49,14 +51,15 @@ exports.createBook = async (req, res) => {
 //Deletes a book based on the provided ID
 exports.deleteBook = async (req, res) => {
     if(req.params.id.length != 24){                 //checking if the provided id can be valid for the ObjectID based database
-        res.status(400).send("Invalid Id provided")
+        res.status(400).send({ responseMessage:'Book query failed', responseError: 'Invalid id' })
     }
     else{
         try{
             await service.deleteBook(req.params.id)
-            res.status(200).send("Book deleted")
+            res.status(200).send({ responseMessage: "Book deleted" })
         }
         catch(e){
+            console.log(e)
             res.status(500).send(e)
         }
     }
@@ -65,7 +68,7 @@ exports.deleteBook = async (req, res) => {
 //Updates a book based on the received ID and parameters. Any parameter can be null
 exports.updateBook = async (req, res) => {
     if(req.params.id.length != 24){                 //checking if the provided id can be valid for the ObjectID based database
-        res.status(400).send("Invalid Id provided")
+        res.status(400).send({ responseMessage:'Book query failed', responseError: 'Invalid id' })
     }
     else{
         try{
@@ -79,9 +82,10 @@ exports.updateBook = async (req, res) => {
 
             await service.updateBook(updatedBook)
 
-            res.status(200).send("Book updated")
+            res.status(200).send({ responseMessage: "Book updated" })
         }
         catch(e){
+            console.log(e)
             res.status(500).send(e)
         }
     }

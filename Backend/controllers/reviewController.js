@@ -11,6 +11,7 @@ exports.getAllReviews = async (req, res) => {
         res.status(200).json(reviews)
     }
     catch(e) {
+        console.log(e)
         res.status(500).send(e)
     }
 }
@@ -18,7 +19,7 @@ exports.getAllReviews = async (req, res) => {
 //Returns a review based on the provided ID
 exports.getReviewById = async (req, res) => {
     if(req.params.id.length != 24){                 //checking if the provided id can be valid for the ObjectID based database
-        res.status(400).send("Invalid Id provided")
+        res.status(400).send({ responseMessage:'Review query failed', responseError: 'Invalid id' })
     }
     else{
         try{
@@ -33,6 +34,7 @@ exports.getReviewById = async (req, res) => {
             }
         }
         catch(e) {
+            console.log(e)
             res.status(500).send(e)
         }
     }
@@ -50,16 +52,17 @@ exports.createReview = async (req, res) => {
         })
         const validated = await validReview(newReview)
         if(validated){
-            return res.status(400).send(validated)
+            return res.status(400).send({ responseMessage: "Creating review failed", responseError: validated })
         }
 
         await service.createNewReview(newReview)
 
         bookScoreUpdate(req.body.bookid)
 
-        res.status(200).send("Created new review")
+        res.status(200).send({ responseMessage: "Created new review" })
     }
     catch(e){
+        console.log(e)
         res.status(500).send(e)
     }
 }
@@ -67,7 +70,7 @@ exports.createReview = async (req, res) => {
 //Deletes a review belonging to the provided id
 exports.deleteReview = async (req, res) => {
     if(req.params.id.length != 24){                 //checking if the provided id can be valid for the ObjectID based database
-        res.status(400).send("Invalid Id provided")
+        res.status(400).send({ responseMessage:'Deleting review failed', responseError: 'Invalid id' })
     }
     else{
         try{
@@ -77,9 +80,10 @@ exports.deleteReview = async (req, res) => {
 
             bookScoreUpdate(review.bookid)
 
-            res.status(200).send("Review deleted")
+            res.status(200).send({ responseMessage: "Review deleted" })
         }
         catch(e){
+            console.log(e)
             res.status(500).send(e)
         }
     }
@@ -88,7 +92,7 @@ exports.deleteReview = async (req, res) => {
 //Updates a review based on the requesdt body. Any of the parameters can be null
 exports.updateReview = async (req, res) => {
     if(req.params.id.length != 24){                 //checking if the provided id can be valid for the ObjectID based database
-        res.status(400).send("Invalid Id provided")
+        res.status(400).send({ responseMessage:'Review update failed', responseError: 'Invalid id' })
     }
     else{
         try{
@@ -103,7 +107,7 @@ exports.updateReview = async (req, res) => {
 
             const validated = await validReview(updatedReview)
             if(validated){
-                return res.status(400).send(validated)
+                return res.status(400).send({ responseMessage: "Review update failed", responseError: validated })
             }
 
             await service.updateReview(updatedReview)
@@ -112,9 +116,10 @@ exports.updateReview = async (req, res) => {
 
             bookScoreUpdate(review.bookid)
 
-            res.status(200).send("Review updated")
+            res.status(200).send({ responseMessage: "Review updated" })
         }
         catch(e){
+            console.log(e)
             res.status(500).send(e)
         }
     }
@@ -123,7 +128,7 @@ exports.updateReview = async (req, res) => {
 //returns all reviews written about a book
 exports.getReviewsByBookId = async (req, res) => {
     if(req.params.id.length != 24){                 //checking if the provided id can be valid for the ObjectID based database
-        res.status(400).send("Invalid Id provided")
+        res.status(400).send({ responseMessage:'Review query failed', responseError: 'Invalid book id' })
     }
     else{
         try{
@@ -131,6 +136,7 @@ exports.getReviewsByBookId = async (req, res) => {
             res.status(200).json(bookReviews)
         }
         catch(e){
+            console.log(e)
             res.status(500).send(e)
         }
     }
@@ -139,7 +145,7 @@ exports.getReviewsByBookId = async (req, res) => {
 //Returns all reviews written by a user
 exports.getReviewsByAuthorId = async (req, res) => {
     if(req.params.id.length != 24){                 //checking if the provided id can be valid for the ObjectID based database
-        res.status(400).send("Invalid Id provided")
+        res.status(400).send({ responseMessage:'Review query failed', responseError: 'Invalid author id' })
     }
     else{
         try{
@@ -147,6 +153,7 @@ exports.getReviewsByAuthorId = async (req, res) => {
             res.status(200).json(authorReviews)
         }
         catch(e){
+            console.log(e)
             res.status(500).send(e)
         }
     }

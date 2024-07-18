@@ -12,6 +12,7 @@ exports.getAllUsers = async (req, res) => {
         res.status(200).json(users)
     }
     catch(e) {
+        console.log(e)
         res.status(500).send(e)
     }
 }
@@ -32,6 +33,7 @@ exports.getUserById = async (req, res) => {
             }
         }
         catch(e) {
+            console.log(e)
             res.status(500).send(e)
         }
     }
@@ -49,6 +51,7 @@ exports.getUserByUsername = async (req, res) => {
         }
     }
     catch(e) {
+        console.log(e)
         res.status(500).send(e)
     }
 }
@@ -68,7 +71,7 @@ exports.createUser = async (req, res) => {
     }
     catch(e){
         console.log(e)
-        res.status(500).send({ responseMessage: 'Failed to create new user' })
+        res.status(500).send(e)
     }
 }
 
@@ -83,6 +86,7 @@ exports.deleteUser = async (req, res) => {
             res.status(200).send({ responseMessage: 'User deleted' })
         }
         catch(e){
+            console.log(e)
             res.status(500).send(e)
         }
     }
@@ -112,7 +116,8 @@ exports.updateUser = async (req, res) => {
             res.status(200).send({ responseMessage: 'User updated' })
         }
         catch(e){
-            res.status(500).send({ responseMessage: 'User update failed' })
+            console.log(e)
+            res.status(500).send(e)
         }
     }
 }
@@ -134,6 +139,7 @@ exports.login = async (req, res) => {
         res.status(200).send({ responseMessage: 'Login succesful', username: user.username, email: user.email, name: user.name, accessToken: accessToken })
     }
     catch(e){
-        res.status(500).send({ responseMessage: 'Login failed' })
+        console.log(e)
+        res.status(500).send(e)
     }
 }
