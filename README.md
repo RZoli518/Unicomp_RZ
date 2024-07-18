@@ -27,9 +27,10 @@ Backend Setup:
         SECRETKEY
     Database/SQL
         MongoDB
-    Start options:
-        'npm run start': Starts the backend.
-        'npm run dev': Starts the backend using nodemon, it will automatically restart upon changes to project files
+    Starting the backend:
+        In the backend folder you can run the following commands:
+            'npm run start': Starts the backend using node.
+            'npm run dev': Starts the backend using nodemon.
     Default port:
         The backend will run on the port 5000 unless specified otherwise in the .env file
     
